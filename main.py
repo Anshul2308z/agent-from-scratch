@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import os
 from openai import OpenAI
+from available_functions import available_functions
 
 import argparse 
 
@@ -8,7 +9,9 @@ def generate_content(client, messages):
             
     response = client.chat.completions.create(
     model = "openrouter/free",
-    messages = messages )
+    messages = messages,
+    tools = available_functions 
+    )
     return response
 
 def verbose_output(prompt, usage):
@@ -45,8 +48,13 @@ def main():
         base_url="https://openrouter.ai/api/v1",
         api_key=api_key
     )
-
-    messages = [{
+    from prompts import system_prompt
+    messages = [
+        {
+            "role":"system",
+            "content": system_prompt
+        },
+        {
             "role":"user",
             "content": prompt,
         }]
@@ -56,6 +64,13 @@ def main():
     if verbose ==True :
         usage = response.usage
         verbose_output(prompt, usage)
+
+    message = response.choices[0].message
+    
+    import json
+    for tool_call in message.tool_calls:
+        function_args = json.loads(tool_call.function.arguments or "{}")
+        print(f"Calling function: {tool_call.function.name}({function_args})")
 
 
     print(response.choices[0].message.content)
