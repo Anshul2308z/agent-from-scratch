@@ -11,11 +11,11 @@ def get_file_content( working_dir: str, file_path: str ) -> str:
             )
         )
 
-        valid_target_dir = os.path.commonpath(
+        valid_target_file = os.path.commonpath(
             [abs_working_directory, target_file]
         ) == abs_working_directory
 
-        if valid_target_dir is False: 
+        if valid_target_file is False: 
             return f'Error: Cannot read "{file_path}" as it is outside the permitted working directory'
 
         if os.path.isfile(target_file) is False: 
