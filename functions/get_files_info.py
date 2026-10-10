@@ -21,7 +21,7 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
 
     try: 
         abs_working_directory = os.path.abspath(working_directory)
-        target_dir = os.path.abspath(
+        target_dir = os.path.normpath(
             os.path.join(abs_working_directory, directory)
         )
         # checks weather target_dir is inside our working dir :
