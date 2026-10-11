@@ -2,7 +2,7 @@ schema_get_files_info = {
     "type": "function",
     "function": {
         "name": "get_files_info",
-        "description": "Lists files in a specified directory relative to the working directory, providing file size and directory status",
+        "description": "Lists the entries in a directory relative to the working directory, including each item's name, size, and directory status. Use only when the user asks what files or directories exist. Do not use this to read file contents or execute files.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -18,7 +18,7 @@ schema_get_file_content = {
     "type": "function",
     "function": {
         "name": "get_file_content",
-        "description": "Returns the content of a file relative to the working directory, truncated to 10000 characters",
+        "description": "Reads and returns the text content of one file relative to the working directory, truncated to 10000 characters. Use when the user asks to read, inspect, or retrieve file contents. Do not use this to list directories or execute files.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -36,7 +36,7 @@ schema_write_file = {
     "type": "function",
     "function": {
         "name": "write_file",
-        "description": "Writes content to a file relative to the working directory",
+        "description": "Creates or overwrites a file relative to the working directory with the supplied content. Use when the user asks to create, write, save, or modify a file.",
         "parameters": {
             "type": "object",
             "properties": {
@@ -58,7 +58,7 @@ schema_run_python_file = {
     "type": "function",
     "function": {
         "name": "run_python_file",
-        "description": "Runs a Python file relative to the working directory",
+        "description": "Executes a Python file relative to the working directory and returns its output. Use when the user asks to run, execute, or test a Python file. Do not use this to inspect the file's source code.",
         "parameters": {
             "type": "object",
             "properties": {

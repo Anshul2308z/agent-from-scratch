@@ -1,13 +1,13 @@
 import os 
 
-def get_file_content( working_dir: str, file_path: str ) -> str: 
+def get_file_content(working_directory: str, file_path: str) -> str:
 
     try :
-        abs_working_directory=  os.path.abspath(working_dir)
+        abs_working_directory = os.path.abspath(working_directory)
 
         target_file = os.path.abspath(
             os.path.join(
-                working_dir, file_path
+                abs_working_directory, file_path
             )
         )
 

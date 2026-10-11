@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import os
 from openai import OpenAI
-from available_functions import available_functions
+from call_function_schema import available_functions
 
 import argparse 
 
@@ -66,11 +66,24 @@ def main():
         verbose_output(prompt, usage)
 
     message = response.choices[0].message
-    
+
     import json
+    from call_function import call_function
+    
     for tool_call in message.tool_calls:
         function_args = json.loads(tool_call.function.arguments or "{}")
-        print(f"Calling function: {tool_call.function.name}({function_args})")
+        result_message = call_function(tool_call, verbose= verbose)
+
+        content = result_message["content"]
+
+        if content is None: 
+            raise Exception("The returned tool message should have a non-empty \"content\". ")
+
+        if verbose:
+            print(f"-> {result_message['content']}")
+        
+        
+        
 
 
     print(response.choices[0].message.content)
