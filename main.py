@@ -58,35 +58,49 @@ def main():
             "role":"user",
             "content": prompt,
         }]
-    
-    response = generate_content(client, messages)
-
-    if verbose ==True :
-        usage = response.usage
-        verbose_output(prompt, usage)
-
-    message = response.choices[0].message
 
     import json
     from call_function import call_function
-    
-    for tool_call in message.tool_calls:
-        function_args = json.loads(tool_call.function.arguments or "{}")
-        result_message = call_function(tool_call, verbose= verbose)
 
-        content = result_message["content"]
+    for _ in range(20):
+        response = generate_content(client, messages)
 
-        if content is None: 
-            raise Exception("The returned tool message should have a non-empty \"content\". ")
+        if verbose ==True :
+            usage = response.usage
+            verbose_output(prompt, usage)
 
-        if verbose:
-            print(f"-> {result_message['content']}")
+        message = response.choices[0].message
+
+        #Agent is not calling any tools! 
+        if not message.tool_calls:
+            print( message.content )
+            return 
+        messages.append(
+            message
+        )
+
+        #Agent has tool_calls to make! 
+        for tool_call in message.tool_calls:
+
+            result_message = call_function(tool_call, verbose= verbose)
+
+            content = result_message["content"]
+
+            if content is None: 
+                raise Exception("The returned tool message should have a non-empty \"content\". ")
+
+            if verbose:
+                print(f"-> {result_message['content']}")
+
+            messages.append(
+                result_message
+            )
+    else:
+        #this is the so called for else structure, so I replaced my checking of _ == 19 by this, as 20 is the limit of iterations we have allowed, _ spans from 0 to 19.
+        exit(code=1)
+
+
         
-        
-        
-
-
-    print(response.choices[0].message.content)
 
     
 
