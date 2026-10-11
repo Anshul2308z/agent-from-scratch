@@ -59,7 +59,6 @@ def main():
             "content": prompt,
         }]
 
-    import json
     from call_function import call_function
 
     for _ in range(20):
